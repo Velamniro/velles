@@ -1,0 +1,47 @@
+{% extends 'template.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="container col-12 col-md-9 col-xl-6">
+      {% if file.images.all %}
+        <div id="carouselIndicators" class="carousel slide">
+          <div class="carousel-inner">
+            {% for img in file.images.all %}
+              <div class="carousel-item {% if img.main == True %}active{% endif %}">
+                <img src="{{ img.image.url }}" alt="{{ img.pk }} img" class="d-block w-100 rounded-top">
+              </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      {% endif %}
+      </div>
+      <div class="container col-12 col-md-3 col-xl-6">
+        <h2>{{ file.title }}</h2>
+        <p>{{ file.description }}</p><br>
+        <p>{{ file.game }} | {{ file.type.name }} <br> Дата создания: {{ file.create_datetime }}<br> 
+          <img src="{{ file.author.avatar.url }}" alt="" style="width: 1.5em; border-radius: 0.5em;">{{ file.author.username }}
+          {% if request.user.is_authenticated %}
+            <i class="fa-{% if file in request.user.favourites.all %}solid{% else %}regular{% endif %} fa-star" 
+              onclick="location.href=`{% url 'favourite_add' file.slug %}`;" style="cursor: pointer;"></i>
+          {% endif %} <br>
+          <a class="btn btn-primary" href="{{ file.url }}" role="button">Скачать файл(-ы)</a>
+        </p>  
+      </div> 
+    </div>
+  </div>
+{% endblock %}
+
+{% block head_import %}
+{% endblock %}
+{% block body_import %}
+{% endblock %}

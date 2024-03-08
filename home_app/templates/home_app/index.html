@@ -5,13 +5,13 @@
   <div class="container-fluid row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     {% for file in files %}
       <div class="col h-100">
-        <div class="card file-window" onclick="location.href='#';">
+        <div class="card file-window">
           {% if file.images.all %}
             <div id="carouselIndicators-{{file.pk}}" class="carousel slide">
               <div class="carousel-inner">
                 {% for img in file.images.all %}
                   <div class="carousel-item {% if img.main == True %}active{% endif %}">
-                    <img src="{{ img.image.url }}" alt="{{ img.pk }} img" class="d-block w-100 rounded-top">
+                    <img src="{{ img.image.url }}" alt="{{ img.pk }} img" class="d-block w-100 rounded-top" onclick="location.href=`{% url 'file' file.slug %}`;">
                   </div>
                 {% endfor %}
               </div>
@@ -25,16 +25,16 @@
               </button>
             </div>
           {% endif %}
-          <div class="card-body">
+          <div class="card-body" onclick="location.href=`{% url 'file' file.slug %}`;">
             <h5 class="card-title">{{ file.title }}</h5>
             <p class="card-text">{{ file.about }}</p>
           </div>
-          <div class="card-footer">
+          <div class="card-footer" onclick="location.href=`{% url 'file' file.slug %}`;">
             <small class="text-body-secondary">{{ file.game }} | {{ file.type.name }}</small><br>
             <small class="text-body-secondary">Дата создания: {{ file.create_datetime }}</small><br>
             <small class="text-body-secondary"><img src="{{ file.author.avatar.url }}" alt="" style="width: 1.5em; border-radius: 0.5em;">{{ file.author.username }}</small>
             {% if request.user.is_authenticated %}
-              <small class="text-body-secondary"><i class="fa-regular fa-star"></i></small>
+              <small class="text-body-secondary"></small>
             {% endif %}
           </div>
         </div>

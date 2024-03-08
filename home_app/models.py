@@ -24,6 +24,7 @@ class File(models.Model):
     class Meta:
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
+        
 
 class FileImage(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='images')
