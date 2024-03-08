@@ -17,7 +17,7 @@ class File(models.Model):
     type = models.ForeignKey('Type', on_delete=models.PROTECT, blank=False, null=False, related_name='files')
 
     favourite = models.ManyToManyField(CustomUser, default=None, blank=True, related_name='favourites')
-    creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='files')
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='files')
 
     objects = models.Manager()
 
@@ -28,6 +28,7 @@ class File(models.Model):
 class FileImage(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField("Изображение", upload_to='files/images')
+    main = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Изображение файла"

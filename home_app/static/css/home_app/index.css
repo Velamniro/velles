@@ -1,0 +1,9 @@
+.file-window {
+    border-radius: 1em;
+}
+
+.file-window:hover {
+    transition: background-color 0.5s;
+    background-color: #86E7B8;
+    cursor: pointer;
+}

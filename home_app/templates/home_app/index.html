@@ -1,10 +1,50 @@
 {% extends 'template.html' %}
+{% load static %}
 
 {% block content %}
-    
+  <div class="container-fluid row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    {% for file in files %}
+      <div class="col h-100">
+        <div class="card file-window" onclick="location.href='#';">
+          {% if file.images.all %}
+            <div id="carouselIndicators-{{file.pk}}" class="carousel slide">
+              <div class="carousel-inner">
+                {% for img in file.images.all %}
+                  <div class="carousel-item {% if img.main == True %}active{% endif %}">
+                    <img src="{{ img.image.url }}" alt="{{ img.pk }} img" class="d-block w-100 rounded-top">
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndicators-{{file.pk}}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselIndicators-{{file.pk}}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ file.title }}</h5>
+            <p class="card-text">{{ file.about }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-body-secondary">{{ file.game }} | {{ file.type.name }}</small><br>
+            <small class="text-body-secondary">Дата создания: {{ file.create_datetime }}</small><br>
+            <small class="text-body-secondary"><img src="{{ file.author.avatar.url }}" alt="" style="width: 1.5em; border-radius: 0.5em;">{{ file.author.username }}</small>
+            {% if request.user.is_authenticated %}
+              <small class="text-body-secondary"><i class="fa-regular fa-star"></i></small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block head_import %}
+<link rel="stylesheet" href="{% static 'css/home_app/index.css' %}">
 {% endblock %}
 {% block body_import %}
 {% endblock %}
