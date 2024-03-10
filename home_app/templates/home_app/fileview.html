@@ -26,7 +26,7 @@
       {% endif %}
       </div>
       <div class="container col-12 col-md-3 col-xl-6">
-        <h2>{{ file.title }}</h2>
+        <h2>{{ file.name }}</h2>
         <p>{{ file.description }}</p><br>
         <p>{{ file.game }} | {{ file.type.name }} <br> Дата создания: {{ file.create_datetime }}<br> 
           <img src="{{ file.author.avatar.url }}" alt="" style="width: 1.5em; border-radius: 0.5em;">{{ file.author.username }}

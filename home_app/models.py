@@ -1,3 +1,11 @@
+"""Copyright 2024 Velamniro
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."""
+
 from django.db import models
 from django.utils.html import mark_safe
 
@@ -5,7 +13,7 @@ from users_app.models import CustomUser
 
 # Create your models here.
 class File(models.Model):
-    title = models.CharField("Название файла", max_length=128)
+    name = models.CharField("Название файла", max_length=128)
     about = models.CharField("О чем этот файл", max_length=250)
     description = models.TextField("Полное описание")
 
@@ -24,7 +32,7 @@ class File(models.Model):
     class Meta:
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
-        
+
 
 class FileImage(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='images')
