@@ -48,6 +48,9 @@ class FileImage(models.Model):
 
 class Game(models.Model):
     name = models.CharField("Название игры", max_length=128)
+    slug = models.SlugField("Slug", unique=True, db_index=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -58,7 +61,10 @@ class Game(models.Model):
 
 class Type(models.Model):
     name = models.CharField("Тип(например мод)", max_length=128)
+    slug = models.SlugField("Slug", unique=True, db_index=True)
     games = models.ManyToManyField(Game, default=None, blank=True, related_name='types')
+
+    objects = models.Manager()
 
     def __str__(self):
         games = []

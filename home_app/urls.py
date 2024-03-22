@@ -13,5 +13,7 @@ from . import views
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('about/', views.about, name='about'),
-    path('file/<slug:slug>', views.FileView.as_view(), name='file')
+    path('file/<slug:slug>', views.FileView.as_view(), name='file'),
+    path('<slug:game_slug>/', views.HomeViewFiltered.as_view(), name='home_filtered'),
+    path('<slug:game_slug>/<slug:type_slug>/', views.HomeViewFiltered.as_view(), name='home_filtered_with_type'),
 ]

@@ -13,18 +13,41 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 
-from .models import File
+from .models import File, Type, Game
 
 # Create your views here.
 class HomeView(ListView):
     model = File
     template_name = 'home_app/index.html'
     context_object_name = 'files'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = "Главная — Velles"
+        context['types'] = Type.objects.all()
+        context['games'] = Game.objects.all()
         return context
+    
+    def get_queryset(self) -> QuerySet[Any]:
+        return File.objects.order_by('-create_datetime')
+    
+class HomeViewFiltered(HomeView):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['game_slug'] = self.kwargs['game_slug']
+        try:
+            context['type_slug'] = self.kwargs['type_slug']
+        finally:
+            return context
+    
+    def get_queryset(self) -> QuerySet[Any]:
+        game = Game.objects.get(slug=self.kwargs['game_slug'])
+        try:
+            type = Type.objects.get(slug=self.kwargs['type_slug'])
+            return File.objects.filter(game=game, type=type).order_by('-create_datetime')
+        except KeyError:
+            return File.objects.filter(game=game).order_by('-create_datetime')
 
 class FileView(DetailView):
     model = File

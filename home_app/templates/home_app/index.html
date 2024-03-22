@@ -2,6 +2,48 @@
 {% load static %}
 
 {% block content %}
+  <!-- Filter panel -->
+  <div class="container-fluid">
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilters" aria-controls="offcanvasExample">
+      <i class="fa-regular fa-filter"></i> Фильтры
+    </button>
+    
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasFilters" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Фильтры</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div>
+          Выберите необходимые фильтры
+        </div>
+        <div class="dropdown mt-3">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Игры
+          </button>
+          <ul class="dropdown-menu">
+            {% for game in games %}
+              <li><a class="dropdown-item" href="{% url 'home_filtered' game.slug %}">{{ game.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% if game_slug %}
+          <div class="dropdown mt-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Типы
+            </button>
+            <ul class="dropdown-menu">
+              {% for type in types %}
+                <li><a class="dropdown-item" href="{% url 'home_filtered_with_type' game_slug type.slug %}">{{ type.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <!-- end Filter Panel -->
+  <!-- All Files' cards -->
   <div class="container-fluid row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     {% for file in files %}
       <div class="col h-100">
@@ -41,10 +83,53 @@
       </div>
     {% endfor %}
   </div>
+  <!-- end All Files' cards -->
+  <!-- Pagination -->
+  <div class="container-fluid">
+    <nav aria-label="Page navigation example"style="background-color: #F9DEC8;">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+        {% for page in paginator.page_range %}
+          {% if page_obj.number == page %}
+            <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+          {% elif page >= page_object.number|add:-2 and page <= page_object.number|add:2%}
+            <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  <!-- end Pagination -->
 {% endblock %}
 
 {% block head_import %}
 <link rel="stylesheet" href="{% static 'css/home_app/index.css' %}">
 {% endblock %}
 {% block body_import %}
+<script src="{% static 'js/home_app/apply_filter.js' %}"></script>
 {% endblock %}

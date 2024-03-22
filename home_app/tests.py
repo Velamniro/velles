@@ -10,6 +10,8 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch
 
+from django.db.models import Manager
+
 # Create your tests here.
 class TestViews(TestCase): 
     def setUp(self) -> None:
@@ -19,12 +21,17 @@ class TestViews(TestCase):
         user.set_password('12345')
         user.save()
 
-    def test_HomeView_getrequest_200code(self) -> None:
+    @patch('django.db.models.Manager.order_by')
+    def test_HomeView_getrequest_200code(self, mock_order_by) -> None:
+        # Arrange
+        mock_order_by.return_value = [FakeFileObject('a', 'a', 'a', {'username': 'a'}),
+                                      FakeFileObject('b', 'b', 'b', {'username': 'b'}),
+                                      FakeFileObject('c', 'c', 'c', {'username': 'c'})]
         # Act
         response = self.client.get(reverse('home'))
         # Assert
         self.assertEqual(response.status_code, 200)
-    
+
     @patch('home_app.views.get_object_or_404')
     def test_FileView_getrequestwithmockobj_200code(self, mock_get_object_or_404) -> None:
         # Arrange
@@ -36,7 +43,6 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         # Final
         self.client.logout()
-
     
     def test_FileView_getrequestNOTexists_404code(self) -> None:
         # Arrange
@@ -55,8 +61,8 @@ class TestViews(TestCase):
 class TestModels(TestCase):
     def setUp(self) -> None:
         from .models import File, Game, Type
-        self.game_obj = Game.objects.create(name="Game name")
-        self.type_obj = Type.objects.create(name="Type name")
+        self.game_obj = Game.objects.create(name="Game name", slug='gamename')
+        self.type_obj = Type.objects.create(name="Type name", slug='typename')
         self.type_obj.games.add(self.game_obj.id)
         self.file_obj = File.objects.create(
             name="Test name",
@@ -100,3 +106,14 @@ class FakeFileObject():
         self.create_datetime = create_datetime
         self.author = author
         self.slug = slug
+
+class FakeGameObject():
+    def __init__(self, name, slug) -> None:
+        self.name = name
+        self.slug = slug
+
+class FakeTypeObject():
+    def __init__(self, name, slug, games) -> None:
+        self.name = name
+        self.slug = slug
+        self.games = games
