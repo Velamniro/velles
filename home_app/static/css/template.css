@@ -5,3 +5,8 @@ body, .offcanvas {
 nav {
     background-color: #D0FFB7;
 }
+
+a, a:visited, a:hover, a:active {
+    color: inherit;
+    text-decoration: inherit;
+}

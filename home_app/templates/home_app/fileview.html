@@ -32,7 +32,7 @@
           <img src="{{ file.author.avatar.url }}" alt="" style="width: 1.5em; border-radius: 0.5em;">{{ file.author.username }}
           {% if request.user.is_authenticated %}
             <i class="fa-{% if file in request.user.favourites.all %}solid{% else %}regular{% endif %} fa-star" 
-              onclick="location.href=`{% url 'favourite_add' file.slug %}`;" style="cursor: pointer;"></i>
+              onclick="location.href=`{% url 'favour_add' file.slug %}`;" style="cursor: pointer;"></i>
           {% endif %} <br>
           <a class="btn btn-primary" href="{{ file.url }}" role="button">Скачать файл(-ы)</a>
         </p>  

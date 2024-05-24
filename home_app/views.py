@@ -18,7 +18,7 @@ from .models import File, Type, Game
 # Create your views here.
 class HomeView(ListView):
     model = File
-    template_name = 'home_app/index.html'
+    template_name = 'share/home-favours.html'
     context_object_name = 'files'
     paginate_by = 10
 
@@ -27,6 +27,7 @@ class HomeView(ListView):
         context['title'] = "Главная — Velles"
         context['types'] = Type.objects.all()
         context['games'] = Game.objects.all()
+        context['mode'] = 'home'
         return context
     
     def get_queryset(self) -> QuerySet[Any]:
